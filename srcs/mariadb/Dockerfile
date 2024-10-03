@@ -1,0 +1,13 @@
+FROM mariadb:10.5
+
+#set enviroment variables
+ENV MYSQL_ROOT_PASSWORD=${DB_ROOT_PASSWORD}
+ENV MYSQL_DATABASE=${DB_ROOT_PASSWORD}
+ENV MYSQL_USER=${DB_USER}
+ENV MYSQL_PASSWORD=${DB_PASSWORD}
+
+#default mariadb port
+EXPOSE 3306
+
+#start mariadb
+CMD ["mysqld"]
