@@ -9,5 +9,5 @@ ENV MYSQL_PASSWORD=${DB_PASSWORD}
 #default mariadb port
 EXPOSE 3306
 
-#start mariadb
+#start mariadB
 CMD ["mysqld"]
