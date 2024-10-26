@@ -1,0 +1,86 @@
+
+Docker and Docker Compose Cheat Sheet
+-------------------------------------
+
+### Docker Basics
+
+| Command                               | Description                                           |
+|---------------------------------------|-------------------------------------------------------|
+| `docker --version`                    | Show Docker version.                                  |
+| `docker info`                         | Display system-wide information about Docker.         |
+| `docker login`                        | Log in to Docker Hub.                                 |
+
+### Images
+
+| Command                                         | Description                                           |
+|-------------------------------------------------|-------------------------------------------------------|
+| `docker pull <image>`                           | Download an image from Docker Hub.                    |
+| `docker images`                                 | List all downloaded images.                           |
+| `docker rmi <image>`                            | Remove an image.                                      |
+| `docker build -t <name>:<tag> .`                | Build an image from a Dockerfile.                     |
+| `docker tag <image> <new-name>:<tag>`           | Tag an image with a new name.                         |
+
+### Containers
+
+| Command                                         | Description                                           |
+|-------------------------------------------------|-------------------------------------------------------|
+| `docker run -it <image>`                        | Run a container in interactive mode.                  |
+| `docker run -d --name <name> <image>`           | Start a container in detached mode.                   |
+| `docker exec -it <container> <command>`         | Execute a command in a running container.             |
+| `docker start <container>`                      | Start a stopped container.                            |
+| `docker stop <container>`                       | Stop a running container.                             |
+| `docker restart <container>`                    | Restart a container.                                  |
+| `docker rm <container>`                         | Remove a container.                                   |
+| `docker ps -a`                                  | List all containers (running and stopped).            |
+| `docker logs <container>`                       | View the logs of a container.                         |
+| `docker inspect <container>`                    | View details of a container.                          |
+| `docker stats`                                  | View resource usage of running containers.            |
+
+### Volumes
+
+| Command                                         | Description                                           |
+|-------------------------------------------------|-------------------------------------------------------|
+| `docker volume create <volume-name>`            | Create a volume.                                      |
+| `docker volume ls`                              | List all volumes.                                     |
+| `docker volume rm <volume-name>`                | Remove a volume.                                      |
+| `docker run -v <volume-name>:<path> <image>`    | Mount a volume to a container.                        |
+
+### Networks
+
+| Command                                         | Description                                           |
+|-------------------------------------------------|-------------------------------------------------------|
+| `docker network ls`                             | List networks.                                        |
+| `docker network create <network-name>`          | Create a new network.                                 |
+| `docker network rm <network-name>`              | Remove a network.                                     |
+| `docker network connect <network> <container>`  | Connect a container to a network.                     |
+| `docker network disconnect <network> <container>` | Disconnect a container from a network.            |
+
+### Docker Compose
+
+| Command                               | Description                                           |
+|---------------------------------------|-------------------------------------------------------|
+| `docker-compose --version`            | Show Docker Compose version.                          |
+| `docker-compose up`                   | Start all services defined in `docker-compose.yml`.   |
+| `docker-compose up -d`                | Start services in detached mode.                      |
+| `docker-compose down`                 | Stop and remove containers, networks, and volumes.    |
+| `docker-compose ps`                   | List running services.                                |
+| `docker-compose logs -f`              | View live logs of services.                           |
+| `docker-compose build`                | Build or rebuild services.                            |
+| `docker-compose restart`              | Restart all services.                                 |
+| `docker-compose stop`                 | Stop running services.                                |
+| `docker-compose rm`                   | Remove stopped services.                              |
+| `docker-compose exec <service> <command>` | Execute a command in a running service container. |
+| `docker-compose config`               | Validate and view the merged Compose file configuration.|
+
+### Dockerfile Basics
+
+| Instruction             | Description                                           |
+|-------------------------|-------------------------------------------------------|
+| `FROM <image>`          | Sets the base image.                                  |
+| `RUN <command>`         | Executes a command during build.                      |
+| `COPY <src> <dest>`     | Copies files from the host to the image.              |
+| `ADD <src> <dest>`      | Copies and uncompresses files (if needed).            |
+| `EXPOSE <port>`         | Specifies the container’s listening port.             |
+| `CMD ["command"]`       | Default command to execute when a container starts.   |
+| `ENTRYPOINT ["command"]`| Sets a fixed command to execute when a container starts.|
+| `WORKDIR <directory>`   | Sets the working directory.                           |
