@@ -1,18 +1,24 @@
 #!/bin/bash
 
+set -e
 
-# CHECK AND FIX (TO FIX)
+# Start MariaDB service
 service mysql start 
 
+# Create SQL script
+cat <<EOF > db1.sql
+CREATE DATABASE IF NOT EXISTS ${MARIADB_DB_NAME};
+CREATE USER IF NOT EXISTS '${MARIADB_USER_NAME}'@'%' IDENTIFIED BY '${MARIADB_USER_PASS}';
+GRANT ALL PRIVILEGES ON ${MARIADB_DB_NAME}.* TO '${MARIADB_USER_NAME}'@'%';
+ALTER USER 'root'@'localhost' IDENTIFIED BY '${MARIADB_ROOT_PASS}';
+FLUSH PRIVILEGES;
+EOF
 
-echo "CREATE DATABASE IF NOT EXISTS $MARIADB_DB_NAME ;" > db1.sql
-echo "CREATE USER IF NOT EXISTS '$MARIADB_USER_NAME'@'%' IDENTIFIED BY '$MARIADB_USER_PASS' ;" >> db1.sql
-echo "GRANT ALL PRIVILEGES ON $MARIADB_DB_NAME.* TO '$MARIADB_USER_NAME'@'%' ;" >> db1.sql
-echo "ALTER USER 'root'@'localhost' IDENTIFIED BY '12345' ;" >> db1.sql
-echo "FLUSH PRIVILEGES;" >> db1.sql
+# Execute SQL script
+mariadb < db1.sql
 
-mysql < db1.sql
-
+# Stop MariaDB service
 kill $(cat /var/run/mysqld/mysqld.pid)
 
-mysqld
+# Start MariaDB server
+exec mysqld
