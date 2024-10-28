@@ -1,13 +1,13 @@
 #!/bin/bash
 
 
-
+# CHECK AND FIX (TO FIX)
 service mysql start 
 
 
-echo "CREATE DATABASE IF NOT EXISTS $db1_name ;" > db1.sql
-echo "CREATE USER IF NOT EXISTS '$db1_user'@'%' IDENTIFIED BY '$db1_pwd' ;" >> db1.sql
-echo "GRANT ALL PRIVILEGES ON $db1_name.* TO '$db1_user'@'%' ;" >> db1.sql
+echo "CREATE DATABASE IF NOT EXISTS $MARIADB_DB_NAME ;" > db1.sql
+echo "CREATE USER IF NOT EXISTS '$MARIADB_USER_NAME'@'%' IDENTIFIED BY '$MARIADB_USER_PASS' ;" >> db1.sql
+echo "GRANT ALL PRIVILEGES ON $MARIADB_DB_NAME.* TO '$MARIADB_USER_NAME'@'%' ;" >> db1.sql
 echo "ALTER USER 'root'@'localhost' IDENTIFIED BY '12345' ;" >> db1.sql
 echo "FLUSH PRIVILEGES;" >> db1.sql
 

@@ -22,7 +22,7 @@ else
 
     # Create the wordpress config file using environment variables
     wp config create --allow-root \
-        --dbname=$WORDPRESS_DB_NAME \
+        --dbname=$WORDPRESS_ \
         --dbuser=$MARIADB_USER_NAME \
         --dbpass=$MARIADB_USER_PASS \
         --dbhost=$MARIADB_HOST
