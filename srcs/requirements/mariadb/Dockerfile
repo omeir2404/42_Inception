@@ -1,13 +1,12 @@
-FROM mariadb:10.5
+FROM debian:bullseye
 
-#set enviroment variables
-ENV MYSQL_ROOT_PASSWORD=${DB_ROOT_PASSWORD}
-ENV MYSQL_DATABASE=${DB_ROOT_PASSWORD}
-ENV MYSQL_USER=${DB_USER}
-ENV MYSQL_PASSWORD=${DB_PASSWORD}
 
-#default mariadb port
-EXPOSE 3306
+RUN apt-get update -y && apt-get install mariadb-server -y
 
-#start mariadB
-CMD ["mysqld"]
+COPY ./tools/50-server.cnf /etc/mysql/mariadb.conf.d/
+
+
+COPY ./tools/script.sh /
+
+
+CMD ["/script.sh"]
