@@ -4,11 +4,11 @@
 set -x
 
 # Check if config file has already been created by a previous run of this script
-if [ -e /etc/php7/php-fpm.d/www.conf ]; then
+if [ -e /etc/php/7.4/fpm/pool.d/www.conf ]; then
     echo "FastCGI Process Manager config already created"
 else
     # Hydrate configuration template with env variables and create config file
-    cat /www.conf.tmpl | envsubst > /etc/php7/php-fpm.d/www.conf
+    cat /www.conf.tmpl | envsubst > /etc/php/7.4/fpm/pool.d/www.conf
 fi
 
 # Check if wp-config.php file has already been created by a previous run

@@ -3,7 +3,7 @@
 set -e
 
 # Start MariaDB service
-service mysql start 
+service mysql start
 
 # Create SQL script
 cat <<EOF > db1.sql
@@ -18,7 +18,7 @@ EOF
 mariadb < db1.sql
 
 # Stop MariaDB service
-kill $(cat /var/run/mysqld/mysqld.pid)
+kill $(cat /run/mysqld/mysqld.pid)
 
 # Start MariaDB server
 exec mysqld
