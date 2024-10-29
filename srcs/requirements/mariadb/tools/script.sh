@@ -1,24 +1,11 @@
-#!/bin/bash
+FROM debian:bullseye
 
-set -e
+RUN apt-get update -y && apt-get install -y mariadb-server
 
-# Start MariaDB service
-service mysql start
+COPY ./tools/50-server.cnf /etc/mysql/mariadb.conf.d/
 
-# Create SQL script
-cat <<EOF > db1.sql
-CREATE DATABASE IF NOT EXISTS ${MARIADB_DB_NAME};
-CREATE USER IF NOT EXISTS '${MARIADB_USER_NAME}'@'%' IDENTIFIED BY '${MARIADB_USER_PASS}';
-GRANT ALL PRIVILEGES ON ${MARIADB_DB_NAME}.* TO '${MARIADB_USER_NAME}'@'%';
-ALTER USER 'root'@'localhost' IDENTIFIED BY '${MARIADB_ROOT_PASS}';
-FLUSH PRIVILEGES;
-EOF
+COPY ./tools/script.sh /
 
-# Execute SQL script
-mariadb < db1.sql
+RUN chmod +x /script.sh
 
-# Stop MariaDB service
-kill $(cat /run/mysqld/mysqld.pid)
-
-# Start MariaDB server
-exec mysqld
+CMD ["/script.sh"]

@@ -3,14 +3,10 @@ FROM debian:bullseye
 ARG WORDPRESS_VERSION=5.8.1
 
 # Update and upgrade the Debian package manager packages
+# Install PHP and mariadb-client packages along with other dependencies
 RUN apt-get update \
-  && apt-get upgrade -y
-
-# Install wget and gettext
-RUN apt-get install -y wget gettext
-
-# Install PHP and related packages
-RUN apt-get install -y \
+  && apt-get upgrade -y \
+  && apt-get install -y wget gettext \
     php php-fpm php-mysqli php-zip php-gd \
     php-mbstring php-cli php-opcache php-zlib \
     php-curl php-json php-iconv php-gettext \
