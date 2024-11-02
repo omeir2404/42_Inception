@@ -4,7 +4,9 @@
 
 all : up
 
-up : 
+up :
+	mkdir -p data/wp
+	mkdir data/mariadb
 	@docker compose -f ./srcs/docker-compose.yml up 
 
 down : 

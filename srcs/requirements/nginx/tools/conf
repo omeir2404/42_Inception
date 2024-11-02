@@ -16,7 +16,7 @@ server {
         include snippets/self-signed.conf;
         include snippets/ssl-params.conf;
 
-        root /var/www/html/wordpress;
+        root /var/www/html;
         index index.php ;
 
         server_name oharoon.42.fr;

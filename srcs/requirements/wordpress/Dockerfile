@@ -21,8 +21,8 @@ RUN curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli
 
 # Create the WordPress directories
 # Set the permissions of the template config file to be readable, writable, and executable by the owner and readable and writable by others
-RUN mkdir -p /run/php /var/www/html/wordpress \
-  && chmod -R 755 /var/www/html/wordpress
+RUN mkdir -p /run/php /var/www/html \
+  && chmod -R 755 /var/www/html
 
 # Add the "wordpress_server" group and user
 RUN groupadd -r wordpress_server \
@@ -34,10 +34,7 @@ COPY ./conf/www.conf /www.conf.tmpl
 # Remove the default config file if it exists
 RUN rm -f /etc/php/7.4/fpm/pool.d/www.conf
 
-WORKDIR /var/www/html/wordpress
-
-# Download the WordPress core using the CLI
-RUN wp core download --allow-root --version=$WORDPRESS_VERSION --path=/var/www/html/wordpress
+WORKDIR /var/www/html
 
 # Copy the setup script to the container root
 COPY ./tools/script.sh /script.sh
@@ -45,4 +42,4 @@ COPY ./tools/script.sh /script.sh
 # Set the setup script as executable
 RUN chmod +x /script.sh
 
-ENTRYPOINT [ "/script.sh" ]
+ENTRYPOINT [ "sh", "/script.sh" ]
