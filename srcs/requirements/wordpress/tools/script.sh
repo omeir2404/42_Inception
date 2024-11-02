@@ -20,14 +20,15 @@ else
         --dbname=$WORDPRESS_DB_NAME \
         --dbuser=$MARIADB_USER_NAME \
         --dbpass=$MARIADB_USER_PASS \
-        --dbhost=$MARIADB_HOST
+        --dbhost=$MARIADB_HOST \
+        --path=/var/www/html/wordpress
 
     # Create the WordPress database using the config file created above
-    wp db create --allow-root
+    wp db create --allow-root --path=/var/www/html/wordpress
 fi
 
 # Check if WordPress is already installed
-if wp core is-installed --allow-root; then
+if wp core is-installed --allow-root --path=/var/www/html/wordpress; then
     echo "WordPress core already installed"
 else
     # Install WordPress with environment variables
@@ -36,22 +37,24 @@ else
         --title=$WORDPRESS_TITLE \
         --admin_user=$WORDPRESS_ADMIN_NAME \
         --admin_email=$WORDPRESS_ADMIN_EMAIL \
-        --admin_password=$WORDPRESS_ADMIN_PASS
+        --admin_password=$WORDPRESS_ADMIN_PASS \
+        --path=/var/www/html/wordpress
 
     # Create a new author user
     wp user create --allow-root \
         $WORDPRESS_USER_NAME \
         $WORDPRESS_USER_EMAIL \
         --role=author \
-        --user_pass=$WORDPRESS_USER_PASS
+        --user_pass=$WORDPRESS_USER_PASS \
+        --path=/var/www/html/wordpress
 
     # Set the debugging mode of WordPress to false which will turn off debugging messages, error reporting, and logging. Needed when using CLI from container
-    wp config set WORDPRESS_DEBUG false --allow-root
+    wp config set WORDPRESS_DEBUG false --allow-root --path=/var/www/html/wordpress
 fi
 
 # Update all plugins
-wp plugin update --all --allow-root
+wp plugin update --all --allow-root --path=/var/www/html/wordpress
 
-# Start the php-fpm7 process with the exec command, passing any additional arguments ($@)
+# Start the php-fpm process with the exec command, passing any additional arguments ($@)
 echo "Start FastCGI Process Manager"
-exec php-fpm7 --nodaemonize $@
+exec php-fpm7.4 --nodaemonize
