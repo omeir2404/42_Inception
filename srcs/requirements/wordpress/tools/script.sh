@@ -12,7 +12,7 @@ else
 fi
 
 # Check if wp-config.php file has already been created by a previous run
-if [ -e wp-config.php ]; then
+if [ -e /var/www/html/wordpress/wp-config.php ]; then
     echo "WordPress config already created"
 else
     # Create the WordPress config file using environment variables
