@@ -1,0 +1,49 @@
+
+echo -e "\e[31m[mariadb:setup.sh] Script Start!\e[0m"
+
+mkdir -p /run/mysqld
+chown -R mysql:mysql /run/mysqld
+
+chown -R mysql:mysql /var/lib/mysql
+
+if ! [ -d "/var/lib/mysql/$MARIADB_DB_NAME" ]; then
+    service mariadb start
+    while ! mysqladmin ping -u root --silent ; do
+        echo "Waiting for MariaDB to start..."
+        sleep 2
+    done
+
+    export __QUERY="
+        USE mysql;
+        ALTER USER 'root'@'localhost' IDENTIFIED BY '$MARIADB_ROOT_PASS';
+        FLUSH PRIVILEGES;
+        CREATE DATABASE IF NOT EXISTS $MARIADB_DB_NAME;
+        CREATE USER IF NOT EXISTS '$MARIADB_USER_NAME'@'%' IDENTIFIED BY '$MARIADB_USER_PASS';
+        GRANT ALL PRIVILEGES ON $MARIADB_DB_NAME.* TO '$MARIADB_USER_NAME'@'%';
+        FLUSH PRIVILEGES;
+        SHUTDOWN;
+        "
+    export __MYSQL_FLAGS="--socket=/run/mysqld/mysqld.sock --host=localhost"
+
+    mysql $__MYSQL_FLAGS -uroot -p"$MARIADB_ROOT_PASS" -e "$__QUERY" > /dev/null
+    if [ $? -eq 0 ]; then
+        echo "MySQL setup completed successfully:"
+    else
+        echo "MySQL setup failed:"
+    fi
+    echo "mysql $__MYSQL_FLAGS -uroot -p'$MARIADB_ROOT_PASS' -e '$__QUERY'"
+
+    echo "We are going to kill all of the processes of mysqld after mysql shutdown."
+    for PID in $(ps aux | grep '[m]ysqld' | awk '{print $2}'); do
+        echo "Killing MySQL process with PID: $PID"
+        kill -9 $PID
+    done
+
+else
+   echo "Database has already been created."
+fi
+
+echo "MariaDB is running in the foreground[...]"
+
+
+exec mysqld_safe --bind-address=0.0.0.0 --port=3306

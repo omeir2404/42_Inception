@@ -11,14 +11,22 @@ fi
 mkdir -p /run/mysqld
 chown -R mysql:mysql /run/mysqld
 
-# Ensure the data directory is writable
-chown -R mysql:mysql /var/lib/mysql
+# Ensure the data directory exists and is writable
+if [ ! -d /var/lib/mysql ]; then
+    mkdir -p /var/lib/mysql
+    chown -R mysql:mysql /var/lib/mysql
+fi
 
-echo "\n\n\n\n\nchanging permissions for aria_log_control\n\n\n\n\n\n\n\n\n\n\n\\nn\\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nn\\nn\n\n\n"
-# Remove any existing lock files
-# rm -f /var/lib/mysql/aria_log_control
-chmod 660 /var/lib/mysql/aria_log_control
-chown mysql:mysql /var/lib/mysql/aria_log_control
+# Remove any existing aria_log_control file to avoid corruption
+if [ -f /var/lib/mysql/aria_log_control ]; then
+    echo "Removing existing aria_log_control file."
+    rm -f /var/lib/mysql/aria_log_control
+fi
+
+# Changing permissions for aria_log_control (optional, removed as we delete it)
+# touch /var/lib/mysql/aria_log_control
+# chmod 660 /var/lib/mysql/aria_log_control
+# chown mysql:mysql /var/lib/mysql/aria_log_control
 
 # Update MariaDB configuration to reduce log verbosity
 if [ -f /etc/my.cnf ]; then
@@ -27,11 +35,11 @@ elif [ -f /etc/mysql/my.cnf ]; then
     sed -i '/\[mysqld\]/a log_warnings=1' /etc/mysql/my.cnf
 fi
 
-# Start MariaDB server
+# Start MariaDB server with networking disabled for initial setup
 mysqld --user=mysql --datadir=/var/lib/mysql --skip-networking &
 
 # Wait for MariaDB to start
-sleep 5
+sleep 10  # Increased wait time to ensure MariaDB is fully initialized
 
 # Run mysql_upgrade with --force and root password
 echo "Running mysql_upgrade"
@@ -46,12 +54,14 @@ fi
 # Restart MariaDB server to apply configuration changes
 pkill mysqld
 sleep 3
+
+# Start MariaDB with networking enabled
 mysqld --user=mysql --datadir=/var/lib/mysql &
 
 # Wait for MariaDB to start
-sleep 5
+sleep 10  # Increased wait time to ensure MariaDB is fully initialized
 
-# Create SQL script
+# Create SQL script for database and user setup
 cat <<EOF > db1.sql
 CREATE DATABASE IF NOT EXISTS ${MARIADB_DB_NAME};
 CREATE USER IF NOT EXISTS '${MARIADB_USER_NAME}'@'%' IDENTIFIED BY '${MARIADB_USER_PASS}';
@@ -63,5 +73,8 @@ EOF
 # Execute SQL script
 mariadb -u root -p"${MARIADB_ROOT_PASS}" < db1.sql
 
+# Clean up the SQL script
+rm db1.sql
+
 # Keep the container running by starting the MariaDB server in the foreground
-exec mysqld --user=mysql --datadir=/var/lib/mysql   
+exec mysqld --user=mysql --datadir=/var/lib/mysql
