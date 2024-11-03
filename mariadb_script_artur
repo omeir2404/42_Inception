@@ -1,18 +1,23 @@
+#!/bin/bash
 
 echo -e "\e[31m[mariadb:setup.sh] Script Start!\e[0m"
 
+# Ensure the socket directory exists and is writable
 mkdir -p /run/mysqld
 chown -R mysql:mysql /run/mysqld
 
+# Ensure the data directory is writable
 chown -R mysql:mysql /var/lib/mysql
 
-if ! [ -d "/var/lib/mysql/$MARIADB_DB_NAME" ]; then
+if ! [ -d "/var/lib/mysql/$ " ]; then
     service mariadb start
     while ! mysqladmin ping -u root --silent ; do
         echo "Waiting for MariaDB to start..."
         sleep 2
     done
 
+    # It has to be spaces for the indentation of the queries
+    # We must SHUTDOWN the service's session if we want to stop mariadb service
     export __QUERY="
         USE mysql;
         ALTER USER 'root'@'localhost' IDENTIFIED BY '$MARIADB_ROOT_PASS';
@@ -23,9 +28,13 @@ if ! [ -d "/var/lib/mysql/$MARIADB_DB_NAME" ]; then
         FLUSH PRIVILEGES;
         SHUTDOWN;
         "
+    # We need to specify the --socket and --host because these files (my.cnf or my.ini)
+    # do not have the correct access to these attributes.
     export __MYSQL_FLAGS="--socket=/run/mysqld/mysqld.sock --host=localhost"
 
     mysql $__MYSQL_FLAGS -uroot -p"$MARIADB_ROOT_PASS" -e "$__QUERY" > /dev/null
+    # $? holds the status value of the last executed code
+    # -eq (operator that means equal)
     if [ $? -eq 0 ]; then
         echo "MySQL setup completed successfully:"
     else
@@ -45,5 +54,9 @@ fi
 
 echo "MariaDB is running in the foreground[...]"
 
+# Using mysqld_safe in a docker context must be beneficial given that the MariaDB 
+# server restarts if it crashes, logs errors, and applies certain safety configurations.
+# Link: https://dev.mysql.com/doc/refman/8.4/en/mysqld-safe.html
 
 exec mysqld_safe --bind-address=0.0.0.0 --port=3306
+## By default mysql listens on port 3306   
