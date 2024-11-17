@@ -9,6 +9,7 @@ up :
 	mkdir data/mariadb
 	sudo chown -R $(whoami):$(whoami) ~/inception/data/mariadb
 	sudo chmod -R 755 ~/inception/data/mariadb
+	# sudo chmod +x srcs/requirements/wordpress/tools/script.sh
 	rm -f ~/inception/data/mariadb/aria_log_control
 
 	@docker compose -f ./srcs/docker-compose.yml up 

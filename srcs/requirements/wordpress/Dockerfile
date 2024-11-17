@@ -1,45 +1,55 @@
 FROM debian:bullseye
 
-ARG WORDPRESS_VERSION=5.8.1
-
-# Update the Debian repository information
 RUN apt-get update
 
-# Update apt-get for protection against vulnerabilities
 RUN apt-get upgrade -y
 
-# Install necessary packages
-RUN apt-get install -y curl vim mariadb-client redis-tools bash
+RUN apt-get install -y curl
 
-# Install PHP and required extensions
-RUN apt-get install -y php php-fpm php-json php-mysql php-curl php-dom php-exif php-fileinfo php-igbinary php-imagick php-intl php-mbstring php-xml php-zip
+RUN apt-get install -y vim
 
-# Download the WordPress CLI and add it to the PATH and make executable
-RUN curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar \
-  && chmod +x wp-cli.phar \
-  && mv wp-cli.phar /usr/local/bin/wp
 
-# Create the WordPress directories
-# Set the permissions of the template config file to be readable, writable, and executable by the owner and readable and writable by others
-RUN mkdir -p /run/php /var/www/html \
-  && chmod -R 755 /var/www/html
+RUN apt-get install -y mariadb-client
 
-# Add the "wordpress_server" group and user
-RUN groupadd -r wordpress_server \
-  && useradd -r -g wordpress_server wordpress_server
+RUN apt-get install -y redis-tools
+RUN apt-get install -y bash
 
-# Copy the config file to container root as a template file
-COPY ./conf/www.conf /www.conf.tmpl
 
-# Remove the default config file if it exists
-RUN rm -f /etc/php/7.4/fpm/pool.d/www.conf
+RUN apt-get install -y php
 
-WORKDIR /var/www/html
+RUN apt-get install -y php-fpm # fast cgi for nginx
 
-# Copy the setup script to the container root
-COPY ./tools/script.sh /script.sh
 
-# Set the setup script as executable
-RUN chmod +x /script.sh
+RUN apt-get install -y php-json # -> Used for communications with other servers and processing data in JSON format.
+RUN apt-get install -y php-mysql # -> Connects to MySQL for database interactions. (Install the mysqli)
 
-ENTRYPOINT [ "sh", "/script.sh" ]
+RUN apt-get install -y php-curl # Performs remote request operations. 
+RUN apt-get install -y php-dom  # Used to validate Text Widget content and to automatically configure IIS7+.
+RUN apt-get install -y php-exif # (requires php-mbstring) – Works with metadata stored in images. 
+RUN apt-get install -y php-fileinfo  #  Used to detect mimetype of file uploads. 
+
+RUN apt-get install -y php-igbinary # Increases performance as a drop in replacement for the standard PHP serializer. 
+RUN apt-get install -y php-imagick # Increases performance as a drop in replacement for the standard PHP serializer. 
+RUN apt-get install -y php-intl # Enable to perform locale-aware operations including but not limited to formatting, transliteration, encoding conversion, calendar operations, conformant collation, locating text boundaries and working with locale identifiers, timezones and graphemes. 
+RUN apt-get install -y php-mbstring # Used to properly handle UTF8 text. 
+
+
+RUN apt-get install -y php-xml # Used for XML parsing, such as from a third-party site. 
+RUN apt-get install -y php-zip #  Used for decompressing Plugins, Themes, and WordPress update packages. 
+
+RUN curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
+RUN chmod +x wp-cli.phar
+RUN mv wp-cli.phar /usr/local/bin/wp
+
+
+
+#Copies the wp_tools/script
+COPY ./tools/script.sh /home/
+
+
+# Changes the permission of the script
+RUN chmod +x /home/script.sh
+
+EXPOSE 9000
+
+ENTRYPOINT ["/home/script.sh"]

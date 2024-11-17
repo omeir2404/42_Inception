@@ -1,57 +1,36 @@
- ✔ Network inception    Created                                            0.1s 
- ✔ Volume "wordpress"   Created                                            0.0s 
- ✔ Volume "mariadb"     Created                                            0.0s 
- ✔ Container mariadb    Created                                            0.9s 
- ✔ Container wordpress  Created                                            0.1s 
- ✔ Container nginx      Created                                            0.1s 
-Attaching to mariadb, nginx, wordpress
-mariadb    | [mariadb:setup.sh] Script Start!
-wordpress  | /script.sh: 11: envsubst: not found
-wordpress  | FastCGI Process Manager config created
-wordpress  | Waiting for MariaDB to be ready...
-nginx      | Generating a RSA private key
-nginx      | ...............................+++++
-nginx      | ................+++++
-nginx      | writing new private key to '/etc/ssl/private/nginx-selfsigned.key'
-nginx      | -----
-mariadb    | Starting MariaDB database server: mariadbd.
-mariadb    | mysqld is alive
-mariadb    | MySQL setup completed successfully:
-mariadb    | mysql --socket=/run/mysqld/mysqld.sock --host=localhost -uroot -p'root123' -e '...queries...'
-mariadb    | We are going to kill all of the processes of mysqld after mysql shutdown.
-mariadb    | Killing MySQL process with PID: 35
-mariadb    | Killing MySQL process with PID: 148
-mariadb    | Killing MySQL process with PID: 149
-mariadb    | MariaDB is running in the foreground[...]
-mariadb    | ERROR 2002 (HY000): Can't connect to local MySQL server through socket '/run/mysqld/mysqld.sock' (2)
-mariadb    | 241117 15:54:07 mysqld_safe Logging to syslog.
-mariadb    | 241117 15:54:07 mysqld_safe Starting mariadbd daemon with databases from /var/lib/mysql
-wordpress  | Downloading WordPress core
-wordpress  | Downloading WordPress 6.7 (en_US)...
-wordpress  | md5 hash verified: 33d1fa26f96d45836170ec56cb16c917
-wordpress  | Success: WordPress downloaded.
-wordpress  | Creating WordPress config file
-wordpress  | Success: Generated 'wp-config.php' file.
-wordpress  | Installing WordPress
-wordpress  | Error: WordPress files seem to already be present here.
-wordpress  | Creating WordPress config file
-wordpress  | Error: The 'wp-config.php' file already exists.
-wordpress  | Installing WordPress core
-wordpress  | sh: 1: /usr/sbin/sendmail: not found
-wordpress  | Success: WordPress installed successfully.
-wordpress  | Creating a new author user
-wordpress  | Success: Created user 2.
-wordpress  | Starting FastCGI Process Manager
-wordpress  | [17-Nov-2024 15:57:57] ERROR: No pool defined. at least one pool section must be specified in config file
-wordpress  | [17-Nov-2024 15:57:57] ERROR: failed to post process the configuration
-wordpress  | [17-Nov-2024 15:57:57] ERROR: FPM initialization failed
-wordpress exited with code 0
-wordpress  | WordPress core already installed
-wordpress  | Starting FastCGI Process Manager
-wordpress  | [17-Nov-2024 15:57:59] ERROR: No pool defined. at least one pool section must be specified in config file
-wordpress  | [17-Nov-2024 15:57:59] ERROR: failed to post process the configuration
-wordpress  | [17-Nov-2024 15:57:59] ERROR: FPM initialization failed
-wordpress  | WordPress core already installed
-wordpress  | Starting FastCGI Process Manager
-wordpress  | [17-Nov-2024 15:58:01] ERROR: No pool defined. at least one pool section must be specified in config file
-wordpress  | [17-Nov-2024 15:58:01] ERROR: failed to post process the configuration
+mariadb    | ERROR 1045 (28000): Access denied for user 'root'@'localhost' (using password: NO)
+
+
+
+Wordpress files have been downloaded.
+wordpress  | mv: target 'oharoon.42.fr' is not a directory
+wordpress  | Wordpress files discompressed and in folder.
+wordpress  | /home/script.sh: line 35: cd: oharoon.42.fr: No such file or directory
+wordpress  | sed: can't read wp-config-sample.php: No such file or directory
+wordpress  | sed: can't read wp-config-sample.php: No such file or directory
+wordpress  | sed: can't read wp-config-sample.php: No such file or directory
+wordpress  | sed: can't read wp-config-sample.php: No such file or directory
+wordpress  | mv: cannot stat 'wp-config-sample.php': No such file or directory
+wordpress  | Error: This does not seem to be a WordPress installation.
+wordpress  | The used path is: /var/www/html/
+wordpress  | Pass --path=`path/to/wordpress` or run `wp core download`.
+wordpress  | Error: This does not seem to be a WordPress installation.
+wordpress  | The used path is: /var/www/html/
+wordpress  | Pass --path=`path/to/wordpress` or run `wp core download`.
+wordpress  | Add database config inside the wp-config.php. 
+wordpress  | Error: 'wp-config.php' not found.
+wordpress  | Either create one manually or use `wp config create`.
+wordpress  | Error: 'wp-config.php' not found.
+wordpress  | Either create one manually or use `wp config create`.
+wordpress  | Error: 'wp-config.php' not found.
+wordpress  | Either create one manually or use `wp config create`.
+wordpress  | Error: This does not seem to be a WordPress installation.
+wordpress  | The used path is: /var/www/html/
+wordpress  | Pass --path=`path/to/wordpress` or run `wp core download`.
+wordpress  | Error: This does not seem to be a WordPress installation.
+wordpress  | The used path is: /var/www/html/
+wordpress  | Pass --path=`path/to/wordpress` or run `wp core download`.
+wordpress  | Warning: No WordPress installation found. If the command 'redis enable' is in a plugin or theme, pass --path=`path/to/wordpress`.
+wordpress  | Error: 'redis' is not a registered wp command. See 'wp help' for available commands.
+wordpress  | Did you mean 'media'?
+wordpress  | Starting php-fpm7.4 in the foreground[...]
