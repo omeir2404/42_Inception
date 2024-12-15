@@ -31,6 +31,11 @@ services:
     networks:
       - inception
     restart: always
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "--silent"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
 
   nginx:
     container_name: nginx
@@ -53,7 +58,8 @@ services:
     build: ./requirements/wordpress/.
     image: wordpress:42
     depends_on:
-      - mariadb
+      mariadb:
+        condition: service_healthy
     volumes:
       - wordpress:/var/www/html
     env_file:

@@ -1,3 +1,0 @@
-mariadb    | ERROR 2002 (HY000): Can't connect to local MySQL server through socket '/run/mysqld/mysqld.sock' (2)
-
-wordpress  | Error: Object cache could not be enabled. Redis server is unreachable: php_network_getaddresses: getaddrinfo failed: Temporary failure in name resolution [tcp://redis:6379]

@@ -21,14 +21,29 @@ server {
     index index.php;
     root /var/www/html;
 
-    location ~ [^/]\.php(/|$) { 
-        try_files \$uri =404;
+    location / {
+        try_files \$uri \$uri/ /index.php?\$args;
+    }
+
+    location ~ \.php$ {
+        include snippets/fastcgi-php.conf;
         fastcgi_pass wordpress:9000;
-        include fastcgi_params;
         fastcgi_param SCRIPT_FILENAME \$document_root\$fastcgi_script_name;
+        include fastcgi_params;
+    }
+
+    error_page 403 404 /404.html;
+    location = /404.html {
+        root /var/www/html/web-404;
+        internal;
     }
 }
 EOF
+
+# Link the configuration file to sites-enabled if it doesn't already exist
+if [ ! -L /etc/nginx/sites-enabled/default ]; then
+    ln -s /etc/nginx/sites-available/default /etc/nginx/sites-enabled/
+fi
 
 # Start Nginx
 nginx -g "daemon off;"
