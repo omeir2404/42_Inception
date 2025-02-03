@@ -28,3 +28,15 @@ status :
 
 clean: down
 	./reset.sh	sudo nano /etc/hosts
+
+fclean : clean
+	yes | docker system prune -a -f
+	yes | docker image prune -a -f
+	yes | docker container prune -f
+	yes | docker builder prune -a -f
+	yes | docker network prune -f
+	yes | docker volume prune -f
+
+re : clean all
+
+fre : fclean all 
