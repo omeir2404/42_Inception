@@ -57,6 +57,8 @@ services:
   wordpress:
     container_name: wordpress
     build: ./requirements/wordpress/.
+    expose:
+      - "9000"
     image: wordpress:42
     depends_on:
       mariadb:

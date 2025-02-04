@@ -15,7 +15,7 @@ server {
     include snippets/ssl-params.conf;
 
     root /var/www/html;
-    index index.php index.html;
+    index index.php;
 
     server_name oharoon.42.fr;
 

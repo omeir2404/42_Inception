@@ -1,79 +1,59 @@
-# #!/bin/bash
-# # Downloads the file for wordpress
+#!/bin/bash
 
-# dir_path="/var/www/html/oharoon.42.fr/"
-# file_name="wp-config.php"
+# Define the directory and file name
+dir_path="/var/www/html/oharoon.42.fr/"
+file_name="wp-config.php"
 
-# if ! [ -f "$dir_path$file_name" ]; then
+# # Check if wp-config.php does not exist
+# if [ ! -f "$dir_path$file_name" ]; then
+#     cd /var/www/html
 
-# 	cd /var/www/html
-# 	# --silent -> doesn't print anything to the terminal
-# 	# -O -> tells curl to save the file as it is named remotely
-# 	curl --silent -O https://wordpress.org/latest.tar.gz .
+#     # Download the latest WordPress files
+#     curl --silent -O https://wordpress.org/latest.tar.gz
 
-# 	echo "Wordpress files have been downloaded."
+#     # Extract the downloaded tar.gz file
+#     tar -xzf latest.tar.gz
 
-# 	# -x -> extract file
-# 	# -z -> .gz files
-# 	# -f -> path to the file
-# 	# Extract file
-# 	tar -xzf latest.tar.gz
+#     # Remove the tar.gz file
+#     rm latest.tar.gz
 
-# 	# Remove .tar.gz
-# 	rm latest.tar.gz
+#     # Create the directory for the domain and move WordPress files
+#     mkdir -p oharoon.42.fr
+#     mv wordpress/* oharoon.42.fr
+#     rm -rf wordpress
 
-# 	# Saves the files in a given directory
+#     # Change to the domain directory
+#     cd oharoon.42.fr
 
-# 	mkdir -p oharoon.42.fr
+#     # Configure wp-config.php
+#     cp wp-config-sample.php wp-config.php
+#     sed -i "s/database_name_here/$MARIADB_DB_NAME/g" wp-config.php
+#     sed -i "s/username_here/$MARIADB_USER_NAME/g" wp-config.php
+#     sed -i "s/password_here/$MARIADB_USER_PASS/g" wp-config.php
+#     sed -i "s/localhost/$MARIADB_HOST/g" wp-config.php
 
-# 	mv wordpress/* oharoon.42.fr
+#     # Install WordPress using WP-CLI
+#     wp core install --allow-root --url=$WORDPRESS_URL --title="Inception" \
+#     --admin_user=$WORDPRESS_ADMIN_NAME --admin_password=$WORDPRESS_ADMIN_PASS \
+#     --admin_email=$WORDPRESS_ADMIN_EMAIL --skip-email
 
-# 	rm -rf wordpress
-
-# 	echo "Wordpress files discompressed and in folder."
-
-# 	cd oharoon.42.fr
-
-# 	sed -i "s/database_name_here/$MARIADB_DB_NAME/g" wp-config-sample.php
-# 	sed -i "s/username_here/$MARIADB_USER_NAME/g" wp-config-sample.php
-# 	sed -i "s/password_here/$MARIADB_USER_PASS/g" wp-config-sample.php
-# 	sed -i "s/localhost/$MARIADB_HOST/g" wp-config-sample.php
-
-# 	mv wp-config-sample.php wp-config.php
-
-# 	# Uses WP-CLI to create a new user
-# 	# Link -> https://developer.wordpress.org/cli/commands/user/create/
-# 	wp core install --allow-root --url=$URL --title="Inception" \
-# 	--admin_user=$WORDPRESS_ADMIN_NAME \
-# 	--admin_password=$WORDPRESS_ADMIN_PASS \
-# 	--admin_email=$WORDPRESS_ADMIN_EMAIL --skip-email
-
-# 	wp user create --allow-root $WORDPRESS_USER_NAME $WORDPRESS_USER_EMAIL "--user_pass=$WORDPRESS_USER_PASS" --role=author
-
-# 	echo "Add database config inside the wp-config.php. "
-
+#     # Create a new WordPress user using WP-CLI
+#     wp user create --allow-root $WORDPRESS_USER_NAME $WORDPRESS_USER_EMAIL --user_pass=$WORDPRESS_USER_PASS --role=author
 # fi
 
-# # Looks for the attr. listen inside the www.conf and changes it our port
-# sed -i 's|listen = /run/php/php7.4-fpm.sock|listen = 0.0.0.0:9000|g' /etc/php/7.4/fpm/pool.d/www.conf
-
-# # Creates the folder for php
+# # Create the directory for PHP-FPM runtime data
 # mkdir -p /run/php
-# # The /run/php directory is a temporary filesystem location used by PHP and its associated processes, like PHP-FPM (FastCGI Process Manager), to store runtime data. Here’s a closer look at its purpose:
 # touch /run/php/php7.4-fpm.pid
 
-# echo "Starting php-fpm7.4 in the foreground[...]";
-
-# /usr/sbin/php-fpm7.4 --nodaemonize --allow-to-run-as-root
-
+# # Start PHP-FPM in the foreground
+# exec /usr/sbin/php-fpm7.4 --nodaemonize --allow-to-run-as-root
 
 
 
 #-----------------------------
-#!/bin/bash
-
-if [ ! -f wp-config.php ];
+if [ ! -f "$dir_path$file_name" ]; 
 then
+
 	wp core download --allow-root
 
 	wp config create --allow-root \
@@ -93,8 +73,21 @@ then
 	wp user create   --allow-root $WORDPRESS_USER_NAME $WORDPRESS_USER_EMAIL \
 					 --user_pass=$WORDPRESS_USER_PASS
 fi
-/usr/sbin/php-fpm7.4 -F
 
-# docker exec -it mariadb /bin/bash
-# mysql -h mariadb -P 3306 -u mnascime --password
-# SHOW DATABASES; --> USE inception --> SHOW TABLES;
+
+# Create the directory for PHP-FPM runtime data
+mkdir -p /run/php
+touch /run/php/php7.4-fpm.pid
+
+# Start PHP-FPM in the foreground
+echo "Starting php-fpm7.4 in the foreground[...]"
+
+# /usr/sbin/php-fpm7.4 -F
+
+exec /usr/sbin/php-fpm7.4 --nodaemonize --allow-to-run-as-root
+
+
+# # docker exec -it mariadb /bin/bash
+# # mysql -h mariadb -P 3306 -u mnascime --password
+# # SHOW DATABASES; --> USE inception --> SHOW TABLES;
+echo "Starting php-fpm7.4 in the foreground[...]"
