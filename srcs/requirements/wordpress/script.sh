@@ -1,8 +1,8 @@
 #!/bin/bash
 
 # Define the directory and file name
-dir_path="/var/www/html/oharoon.42.fr/"
-file_name="wp-config.php"
+	# dir_path="/var/www/html/oharoon.42.fr/"
+	# file_name="wp-config.php"
 
 # # Check if wp-config.php does not exist
 # if [ ! -f "$dir_path$file_name" ]; then
@@ -51,8 +51,7 @@ file_name="wp-config.php"
 
 
 #-----------------------------
-if [ ! -f "$dir_path$file_name" ]; 
-then
+if [ ! -f wp-config.php ]; then
 
 	wp core download --allow-root
 
@@ -75,19 +74,18 @@ then
 fi
 
 
-# Create the directory for PHP-FPM runtime data
-mkdir -p /run/php
-touch /run/php/php7.4-fpm.pid
+# # Create the directory for PHP-FPM runtime data
+# mkdir -p /run/php
+# touch /run/php/php7.4-fpm.pid
 
 # Start PHP-FPM in the foreground
 echo "Starting php-fpm7.4 in the foreground[...]"
 
-# /usr/sbin/php-fpm7.4 -F
+/usr/sbin/php-fpm7.4 -F
 
-exec /usr/sbin/php-fpm7.4 --nodaemonize --allow-to-run-as-root
+# exec /usr/sbin/php-fpm7.4 --nodaemonize --allow-to-run-as-root
 
 
 # # docker exec -it mariadb /bin/bash
 # # mysql -h mariadb -P 3306 -u mnascime --password
 # # SHOW DATABASES; --> USE inception --> SHOW TABLES;
-echo "Starting php-fpm7.4 in the foreground[...]"

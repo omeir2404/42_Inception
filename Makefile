@@ -2,27 +2,27 @@
 all : up
 
 up :
-	mkdir -p data/wp
-	mkdir data/mariadb
-	sudo chown -R $(whoami):$(whoami) ./data/mariadb
-	sudo chmod -R 755 data/mariadb
-	sudo chown -R www-data:www-data ./data/wp
-	sudo chmod -R 755 ./data/wp
-	# sudo chmod +x srcs/requirements/wordpress/tools/script.sh
-	rm -f ./data/mariadb/aria_log_control
-
+	@if [ ! -e "~/inception/data" ]; then \
+		sudo mkdir ~/inception/data; \
+	fi
+	@if [ ! -e "~/inception/data/wordpress" ]; then \
+		sudo mkdir ~/inception/data/wordpress; \
+	fi
+	@if [ ! -e "~/inception/data/mariadb" ]; then \
+		sudo mkdir ~/inception/data/mariadb; \
+	fi
 	@docker compose -f ./srcs/docker-compose.yml up 
 
-down : 
+down :
 	@docker compose -f ./srcs/docker-compose.yml down -v
 
-stop : 
+stop :
 	@docker compose -f ./srcs/docker-compose.yml stop
 
-start : 
+start :
 	@docker compose -f ./srcs/docker-compose.yml start
 
-status : 
+status :
 	@docker ps
 
 
