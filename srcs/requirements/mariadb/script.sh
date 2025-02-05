@@ -84,6 +84,9 @@
 
 #!/bin/bash
 
+mkdir -p /run/mysqld
+chown -R mysql:mysql /run/mysqld
+
 if ! [ -d "$MARIADB_DB_NAME"  ]; 
 then
 	service mariadb start
@@ -96,4 +99,4 @@ then
 	FLUSH PRIVILEGES;
 	SHUTDOWN;"
 fi
-mysqld_safe --bind-address=0.0.0.0
+mysqld_safe --bind-address=0.0.0.0 --port=3306
