@@ -71,6 +71,17 @@ if [ ! -f wp-config.php ]; then
 
 	wp user create   --allow-root $WORDPRESS_USER_NAME $WORDPRESS_USER_EMAIL \
 					 --user_pass=$WORDPRESS_USER_PASS
+
+
+    # Install and activate the theme(optional)
+    # wp theme install twentytwentyone --activate --allow-root
+	# wp theme install twentytwenty --activate --allow-root
+	wp theme install astra --activate --allow-root
+	# wp theme install oceanwp --activate --allow-root
+	# wp theme install neve --activate --allow-root
+	# wp theme install hestia --activate --allow-root
+	# wp theme install generatepress --activate --allow-root
+	# wp theme install sydney --activate --allow-root
 fi
 
 
