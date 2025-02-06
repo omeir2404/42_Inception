@@ -7,6 +7,6 @@ RUN openssl req -x509 -nodes -days 365 -newkey rsa:2048 -out /etc/nginx/ssl/ngin
 -keyout /etc/nginx/ssl/nginx-selfsigned.key -subj "/C=PT/ST=Lisbon/L=Lisbon/ON=42Lisboa/CN=oharoon/"
 
 
-COPY emprestado.conf /etc/nginx/conf.d/nginx.conf
+COPY conf /etc/nginx/conf.d/nginx.conf
 
 CMD [ "nginx", "-g", "daemon off;" ]
