@@ -1,41 +1,48 @@
 FROM debian:oldstable
 
 
-RUN apt-get update
+RUN apt-get update && apt-get upgrade -y && apt-get install -y \
+    curl \
+    vim \
+    mariadb-client \
+    redis-tools \
+    bash \
+    php \
+    php-fpm \
+    php-json \
+    php-mysql \
+    php-curl \
+    php-dom \
+    php-exif \
+    php-fileinfo \
+    php-igbinary \
+    php-imagick \
+    php-intl \
+    php-mbstring \
+    php-xml \
+    php-zip
 
-RUN apt-get upgrade -y
-
-RUN apt-get install -y curl
-
-RUN apt-get install -y vim
-
-
-RUN apt-get install -y mariadb-client
-
-RUN apt-get install -y redis-tools
-RUN apt-get install -y bash
-
-
-RUN apt-get install -y php
-
-RUN apt-get install -y php-fpm # fast cgi for nginx
-
-RUN apt-get install -y php-json # -> Used for communications with other servers and processing data in JSON format.
-RUN apt-get install -y php-mysql # -> Connects to MySQL for database interactions. (Install the mysqli)
-
-RUN apt-get install -y php-curl # Performs remote request operations. 
-RUN apt-get install -y php-dom  # Used to validate Text Widget content and to automatically configure IIS7+.
-RUN apt-get install -y php-exif # (requires php-mbstring) – Works with metadata stored in images. 
-RUN apt-get install -y php-fileinfo  #  Used to detect mimetype of file uploads. 
-
-RUN apt-get install -y php-igbinary # Increases performance as a drop in replacement for the standard PHP serializer. 
-RUN apt-get install -y php-imagick # Increases performance as a drop in replacement for the standard PHP serializer. 
-RUN apt-get install -y php-intl # Enable to perform locale-aware operations including but not limited to formatting, transliteration, encoding conversion, calendar operations, conformant collation, locating text boundaries and working with locale identifiers, timezones and graphemes. 
-RUN apt-get install -y php-mbstring # Used to properly handle UTF8 text. 
-
-
-RUN apt-get install -y php-xml # Used for XML parsing, such as from a third-party site. 
-RUN apt-get install -y php-zip #  Used for decompressing Plugins, Themes, and WordPress update packages. 
+    #explanation
+    # RUN apt-get update && apt-get upgrade -y && apt-get install -y \
+    # curl \ # Command line tool for transferring data with URLs
+    # vim \ # Text editor
+    # mariadb-client \ # MariaDB client for interacting with MariaDB databases
+    # redis-tools \ # Redis command line tools
+    # bash \ # Bourne Again SHell
+    # php \ # PHP scripting language
+    # php-fpm \ # FastCGI Process Manager for PHP
+    # php-json \ # Used for communications with other servers and processing data in JSON format
+    # php-mysql \ # Connects to MySQL for database interactions (mysqli)
+    # php-curl \ # Performs remote request operations
+    # php-dom \ # Used to validate Text Widget content and to automatically configure IIS7+
+    # php-exif \ # Works with metadata stored in images (requires php-mbstring)
+    # php-fileinfo \ # Used to detect mimetype of file uploads
+    # php-igbinary \ # Increases performance as a drop-in replacement for the standard PHP serializer
+    # php-imagick \ # Provides image processing capabilities
+    # php-intl \ # Enables locale-aware operations, including formatting, transliteration, and more
+    # php-mbstring \ # Used to properly handle UTF8 text
+    # php-xml \ # Used for XML parsing, such as from a third-party site
+    # php-zip # Used for decompressing Plugins, Themes, and WordPress update packages
 
 # RUN apt-get -y update && apt-get -y upgrade && apt-get install -y curl php-fpm php-mysql # simple install
 
