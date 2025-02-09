@@ -2,14 +2,14 @@
 all : up
 
 up :
-	@if [ ! -e "~/inception/data" ]; then \
-		sudo mkdir ~/inception/data; \
+	@if [ ! -e "~/data" ]; then \
+		sudo mkdir ~/data; \
 	fi
-	@if [ ! -e "~/inception/data/wordpress" ]; then \
-		sudo mkdir ~/inception/data/wordpress; \
+	@if [ ! -e "~/data/wordpress" ]; then \
+		sudo mkdir ~/data/wordpress; \
 	fi
-	@if [ ! -e "~/inception/data/mariadb" ]; then \
-		sudo mkdir ~/inception/data/mariadb; \
+	@if [ ! -e "~/data/mariadb" ]; then \
+		sudo mkdir ~/data/mariadb; \
 	fi
 	@docker compose -f ./srcs/docker-compose.yml up 
 
